@@ -16,6 +16,31 @@ Machine learning system for detecting and classifying property blight severity t
 
 ---
 
+## 💬 Project 1: RAG Systems Comparison
+
+### Problem Statement
+Information access and knowledge management are critical challenges in many domains. RAG systems enhance AI responses by combining retrieval of relevant information with natural language generation.
+
+### Our Solution
+Two complete RAG implementations for educational and production use:
+
+1. **Manual RAG** (`medium_manual_rag/`): Built from scratch for learning
+   - Custom TF-IDF embeddings and retrieval
+   - Template-based generation
+   - Zero external dependencies
+   - ~800 lines of educational code
+
+2. **LangChain RAG** (`easy_langchain_rag/`): Modern framework implementation
+   - OpenAI embeddings and GPT integration
+   - FAISS vector database
+   - Production-ready architecture
+   - ~30 lines of framework code
+
+### Educational Value
+Provides clear learning progression from fundamental algorithms to modern AI frameworks, with comprehensive documentation and examples for computer science education.
+
+---
+
 ## 🏠 Project 2: Blight Detection System
 
 ### Problem Statement
@@ -50,32 +75,21 @@ The model achieves 59.5% accuracy with excellent screening capabilities (97.5% r
 
 ---
 
-## 💬 Project 1: RAG Systems Comparison
-
-### Problem Statement
-Information access and knowledge management are critical challenges in many domains. RAG systems enhance AI responses by combining retrieval of relevant information with natural language generation.
-
-### Our Solution
-Two complete RAG implementations for educational and production use:
-
-1. **Manual RAG** (`medium_manual_rag/`): Built from scratch for learning
-   - Custom TF-IDF embeddings and retrieval
-   - Template-based generation
-   - Zero external dependencies
-   - ~800 lines of educational code
-
-2. **LangChain RAG** (`easy_langchain_rag/`): Modern framework implementation
-   - OpenAI embeddings and GPT integration
-   - FAISS vector database
-   - Production-ready architecture
-   - ~30 lines of framework code
-
-### Educational Value
-Provides clear learning progression from fundamental algorithms to modern AI frameworks, with comprehensive documentation and examples for computer science education.
-
----
-
 ## 🚀 Quick Start
+
+### Project 1: RAG Systems
+```bash
+cd proj1_chatbots_for_mich
+
+# Educational path - start with manual implementation
+cd medium_manual_rag
+python simple_rag.py
+
+# Production path - modern framework
+cd ../easy_langchain_rag
+pip install -r requirements.txt
+python langchain_rag.py
+```
 
 ### Project 2: Blight Detection
 ```bash
@@ -90,20 +104,6 @@ python train_blight_model.py
 
 # Make predictions
 python predict_blight.py --model models/blight_model_large_dataset.joblib --demo
-```
-
-### Project 1: RAG Systems
-```bash
-cd proj1_chatbots_for_mich
-
-# Educational path - start with manual implementation
-cd medium_manual_rag
-python simple_rag.py
-
-# Production path - modern framework
-cd ../easy_langchain_rag
-pip install -r requirements.txt
-python langchain_rag.py
 ```
 
 ## 📁 Repository Structure

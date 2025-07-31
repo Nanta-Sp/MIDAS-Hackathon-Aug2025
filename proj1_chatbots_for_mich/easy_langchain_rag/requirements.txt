@@ -1,0 +1,5 @@
+# Simple LangChain RAG Requirements
+langchain
+langchain-openai
+langchain-community
+faiss-cpu

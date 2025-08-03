@@ -1,92 +1,155 @@
-# Project 2: Computer Vision for City Planning in Detroit
+# Detroit Computer Vision - Blight Classification Models
 
-## Overview
+This directory contains machine learning models for predicting blight severity levels using Detroit property survey data from the Detroit Land Bank Authority (DLBA).
 
-This project leverages computer vision and machine learning to analyze Detroit's urban landscape using historical and contemporary imagery (1999–2024) combined with GIS data. The goal is to build tools that enhance city planning capabilities and improve the accuracy of property-level data throughout Detroit.
+## Project Context
 
-## Problem Statement
+The models work with blight survey data containing property condition assessments across Detroit. The task is multi-class classification to predict blight severity levels (0-3) based on property condition indicators.
 
-Detroit faces significant challenges in maintaining accurate property assessments and urban planning data:
-- **Manual verification processes** are time-intensive and resource-heavy
-- **Outdated building habitability assessments** compromise public safety
-- **Inaccurate housing unit counts** affect census data and resource allocation
-- **Limited automation** in property condition monitoring
+**Data Source:** DLBA survey data (20250527_DLBA_survey_data_UM_Detroit.xlsx)
+**Problem Type:** Multi-class classification (4 classes)
+**Features:** Property condition indicators (roof, openings, occupancy, etc.)
+**Target:** Blight severity levels derived from FIELD_DETERMINATION
 
-## Goals
+## Models
 
-Create computer vision models and tools to:
+### `xgboost_baseline.py`
+A baseline XGBoost classifier for 4-class blight prediction.
 
-### Building Habitability Assessment
-- **Identify uninhabitable structures** from aerial and street-level imagery
-- **Classify building conditions** across safety and habitability metrics
-- **Prioritize inspection resources** based on automated risk assessment
-- **Track changes over time** using multi-temporal imagery analysis
+**Features:**
+- Multi-class classification (0=No Blight, 1=Noticeable, 2=Significant, 3=Extreme)
+- Feature encoding and preprocessing
+- Comprehensive evaluation metrics
+- Feature importance analysis
+- Confusion matrix visualization
+- Predictions with PARCEL_ID tracking
 
-### Property Data Enhancement
-- **Improve base unit accuracy** for multi-family buildings
-- **Assist with census audits** by validating housing unit counts
-- **Automate property characteristic detection** (building materials, roof condition, lot usage)
-- **Support zoning and land use planning** with updated property classifications
+**Key Metrics:**
+- Uses accuracy, balanced accuracy, macro/weighted F1, Cohen's kappa, MCC
+- Train/validation/test split (70/10/20)
+- Per-class performance analysis
 
-### Predictive Modeling and Automation
-- **Streamline manual verification** through automated pre-screening
-- **Reduce inspection costs** by targeting high-priority properties
-- **Provide early warning systems** for deteriorating building conditions
-- **Enable data-driven policy decisions** with accurate property intelligence
+### `xgboost_optimized1.py`  
+An advanced XGBoost model with hyperparameter optimization and feature engineering.
 
-## Technical Approach
+**Additional Features:**
+- Bayesian hyperparameter optimization (Optuna)
+- Advanced feature engineering (interaction terms)
+- Feature selection (mutual information)
+- Stratified K-fold cross-validation
+- Model persistence and comprehensive logging
+- Enhanced visualizations
 
-### Data Sources
-- **Historical imagery**: Detroit aerial and satellite imagery (1999-2024)
-- **Street-level imagery**: Google Street View, municipal inspection photos
-- **GIS data**: Property boundaries, zoning information, building footprints
-- **Administrative records**: Permit data, violation history, ownership records
+**Optimization:**
+- 10+ hyperparameters tuned automatically
+- Tree-structured Parzen Estimator (TPE) sampling
+- Early stopping and regularization
+- Class imbalance handling
 
-### Computer Vision Models
-- **Object detection**: Identify buildings, structures, and property features
-- **Classification models**: Assess building condition and habitability status  
-- **Segmentation**: Precise building boundary detection and land use classification
-- **Change detection**: Temporal analysis to track property condition evolution
+## Directory Structure
 
-### Machine Learning Pipeline
-- **Feature extraction**: Automated identification of relevant building characteristics
-- **Multi-modal fusion**: Combine imagery with GIS and administrative data
-- **Model validation**: Ground-truth comparison with inspection records
-- **Scalable deployment**: Production-ready inference for city-wide analysis
+```
+2_detroit_computer_vision/
+├── models/                          # Model scripts and requirements
+│   ├── xgboost_baseline.py         # Baseline XGBoost model
+│   ├── xgboost_optimized1.py       # Optimized XGBoost model
+│   ├── requirements-xgboost_baseline.txt
+│   └── requirements-xgboost_optimized1.txt
+├── training_data/                   # Processed training datasets
+│   ├── blight_features.csv         # Feature matrix
+│   └── blight_labels.csv           # Target labels
+├── deliverables/                    # Model outputs and artifacts
+│   ├── xgboost_baseline/           # Baseline model results
+│   └── xgboost_optimized1/         # Optimized model results
+└── eda/                            # Exploratory data analysis notebooks
+```
 
-## Expected Impact
+## Data
 
-### For City Officials
-- **Enhanced inspection efficiency**: Target resources to highest-risk properties
-- **Improved data accuracy**: Better foundation for policy and planning decisions
-- **Cost reduction**: Automated pre-screening reduces manual workload
-- **Public safety**: Earlier identification of dangerous structures
+**Target Variable:** FIELD_DETERMINATION mapped to 4 classes:
+- 0: No Action (Salvage), NAP (Salvage), Other Resolution Pathways, Vacant (Not Blighted)
+- 1: Noticeable Evidence of Blight  
+- 2: Significant Evidence of Blight
+- 3: Extreme Evidence of Blight
 
-### For Urban Planning
-- **Accurate housing inventory**: Reliable data for demographic and economic analysis
-- **Development insights**: Understanding of neighborhood change patterns
-- **Resource allocation**: Data-driven distribution of city services and investments
-- **Policy evaluation**: Quantitative assessment of intervention effectiveness
+**Features:** Property condition indicators:
+- `IS_OCCUPIED` - Whether property is occupied
+- `FIRE_DAMAGE_CONDITION` - Fire damage assessment
+- `ROOF_CONDITION` - Roof condition rating
+- `OPENINGS_CONDITION` - Doors/windows condition
+- `IS_OPEN_TO_TRESPASS` - Accessibility to trespassers
 
-### For Research and Community
-- **Academic research**: High-quality dataset for urban studies
-- **Community engagement**: Transparent, data-driven neighborhood assessments
-- **Grant applications**: Evidence base for funding proposals
-- **Historical analysis**: Long-term trends in urban development
+**Dataset Size:** ~98,320 property records
+**Class Distribution:** 49% class 1, 27% class 0, 20% class 2, 4% class 3
 
-## Technical Deliverables
+## Usage
 
-1. **Computer vision models** for building condition assessment
-2. **Automated processing pipeline** for imagery analysis
-3. **Integration tools** for GIS and administrative data
-4. **Web interface** for city staff to access results
-5. **API endpoints** for integration with existing city systems
-6. **Documentation and training** materials for city personnel
+### Run Baseline Model
+```bash
+cd models/
+pip install -r requirements-xgboost_baseline.txt
+python xgboost_baseline.py
+```
 
-## Success Metrics
+### Run Optimized Model  
+```bash
+cd models/
+pip install -r requirements-xgboost_optimized1.txt
+python xgboost_optimized1.py
+```
 
-- **Accuracy**: >90% agreement with manual inspections on habitability assessments
-- **Coverage**: City-wide analysis capability for all Detroit properties
-- **Efficiency**: 10x reduction in time required for property condition surveys
-- **Cost savings**: Measurable reduction in inspection and verification costs
-- **Adoption**: Integration into existing city planning workflows
+## Outputs
+
+Each model generates comprehensive artifacts in `deliverables/[model_name]/`:
+
+**Data Analysis:**
+- `data_analytics.json` - Dataset statistics
+- `label_distribution.png` - Class distribution plots
+- `data_summary.png` - Summary statistics
+
+**Model Performance:**
+- `evaluation_results.json` - All metrics and classification report  
+- `confusion_matrix.png` - Prediction accuracy visualization
+- `metrics_comparison.png` - Performance metrics comparison
+
+**Feature Analysis:**
+- `feature_importance.csv` - Feature importance scores
+- `feature_importance.png` - Feature importance visualization
+
+**Predictions:**
+- `test_predictions.csv` - Test set predictions with PARCEL_IDs and probabilities
+
+**Additional (Optimized Model):**
+- `optimization_results.json` - Hyperparameter optimization results
+- `cv_results.json` - Cross-validation results with confidence intervals
+- `best_model.pkl` - Serialized trained model
+
+## Requirements
+
+**Core Dependencies:**
+- pandas >= 2.0.0
+- numpy >= 1.24.0  
+- scikit-learn >= 1.3.0
+- xgboost >= 2.0.0
+- matplotlib >= 3.7.0
+- seaborn >= 0.12.0
+
+**Additional (Optimized Model):**
+- optuna >= 3.4.0
+- joblib >= 1.3.0
+
+## Performance
+
+**Baseline Model Results:**
+- Accuracy: ~62.6%
+- Balanced Accuracy: ~49.7% 
+- Macro F1: ~51.4%
+- Weighted F1: ~60.5%
+
+**Key Findings:**
+- Model performs well on classes 0 and 1 (F1 ~0.66-0.70)
+- Struggles with minority classes 2 and 3 (F1 ~0.35)
+- OPENINGS_CONDITION is the most important feature (60% importance)
+- ROOF_CONDITION and IS_OCCUPIED are secondary features
+
+The models handle class imbalance through balanced evaluation metrics, stratified sampling, and proper train/validation/test splits.

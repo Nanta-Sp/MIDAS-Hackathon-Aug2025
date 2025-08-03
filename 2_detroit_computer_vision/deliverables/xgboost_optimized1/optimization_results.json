@@ -1,0 +1,22 @@
+{
+  "best_value": 0.5187430875743981,
+  "best_params": {
+    "max_depth": 5,
+    "learning_rate": 0.2536999076681771,
+    "n_estimators": 759,
+    "subsample": 0.8394633936788146,
+    "colsample_bytree": 0.6624074561769746,
+    "reg_alpha": 1.5599452033620265,
+    "reg_lambda": 0.5808361216819946,
+    "min_child_weight": 9,
+    "gamma": 3.005575058716044,
+    "scale_pos_weight": 3.832290311184182,
+    "objective": "multi:softprob",
+    "num_class": 4,
+    "eval_metric": "mlogloss",
+    "random_state": 42,
+    "verbosity": 0
+  },
+  "n_trials": 2,
+  "timestamp": "2025-08-03T18:52:53.659313"
+}

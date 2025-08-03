@@ -8,14 +8,45 @@ A minimal RAG implementation focusing on the **core concepts**: Retrieval + Gene
 2. **GENERATION**: LLM to create answers  
 3. **PROMPTING**: Template to combine context + question
 
-## 🚀 Quick Start
+## 🚀 No-Hassle Quick Start
 
+### Option 1: Super Easy (Recommended)
 ```bash
-# Install dependencies
-pip install -r requirements.txt
+# Just run this - it handles everything
+python run_rag_demo.py
+```
 
-# Set OpenAI API key
+### Option 2: Manual Setup
+```bash
+# Install from main requirements (from repo root)
+pip install -r ../../../requirements.txt
+
+# OR install just RAG dependencies
+pip install langchain langchain-openai langchain-community faiss-cpu
+
+# Run the demo (works without API key in demo mode)
+python langchain_rag.py
+```
+
+### Option 3: With Real OpenAI API
+```bash
+# Set your API key for real responses
 export OPENAI_API_KEY="your-api-key"
+python langchain_rag.py
+```
+
+## ✅ What's Fixed
+
+- **No more crashes**: Handles OpenMP library conflicts automatically
+- **No API key required**: Runs in demo mode with mock responses
+- **Better error handling**: Clear messages if dependencies missing
+- **Auto-setup script**: `run_rag_demo.py` installs everything for you
+
+## 🔧 Troubleshooting
+
+**macOS OpenMP Error?** → Fixed automatically (sets `KMP_DUPLICATE_LIB_OK=TRUE`)
+**Missing dependencies?** → Run `python run_rag_demo.py` 
+**No API key?** → That's fine! Demo mode works without it
 
 # Generate knowledge base  
 python synthetic_knowledge_base.py

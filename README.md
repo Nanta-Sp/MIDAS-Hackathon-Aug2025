@@ -40,6 +40,51 @@ Interactive policy modeling tool for Detroit's resilience planning, supporting f
 
 ---
 
+## ⚙️ Environment Setup
+
+### Quick Start (Recommended)
+
+1. **Create the conda environment:**
+   ```bash
+   # Create environment from file
+   conda env create -f environment.yml
+   
+   # Activate environment
+   conda activate midas_aug25
+   ```
+
+2. **Verify installation:**
+   ```bash
+   python -c "import pandas, numpy, sklearn, xgboost, jupyter; print('✅ All core libraries installed!')"
+   ```
+
+3. **Launch Jupyter for data analysis:**
+   ```bash
+   jupyter lab
+   # Navigate to: 2_detroit_computer_vision/eda/project2_detroit_blight_eda.ipynb
+   ```
+
+### Alternative Setup Options
+
+**Using pip only:**
+```bash
+# Create virtual environment
+python -m venv midas_aug25
+source midas_aug25/bin/activate  # Windows: midas_aug25\Scripts\activate
+
+# Install requirements
+pip install -r requirements.txt
+```
+
+**What's included in the environment:**
+- 🔬 **Data Science**: pandas, numpy, matplotlib, seaborn, jupyter
+- 🤖 **Machine Learning**: scikit-learn, xgboost, joblib  
+- 🗂️ **Data Handling**: openpyxl (Excel), geopandas (GIS)
+- 🤖 **AI/RAG**: langchain, faiss-cpu, openai integrations
+- 🗺️ **Geospatial**: folium, contextily (Detroit spatial data)
+
+For detailed setup instructions and troubleshooting, see **[SETUP.md](SETUP.md)**.
+
 ## 🚀 Quick Start
 
 Each project directory contains detailed setup and usage instructions. See individual README files for specific implementation details.
@@ -59,13 +104,22 @@ MIDAS-Hackathon-Aug2025/
 ├── 1_detroit_open_data_portal/     # Detroit Open Data Portal Enhancement
 │   └── README.md
 ├── 2_detroit_computer_vision/      # Computer Vision for City Planning
+│   ├── eda/                       # Exploratory Data Analysis
+│   │   └── project2_detroit_blight_eda.ipynb
 │   └── README.md
 ├── 3_detroit_flood_risk_analysis/  # Flood Risk Policy Analysis Tool
 │   └── README.md
-├── learning/                       # Learning resources and experiments
-│   ├── rag_for_proj1/             # RAG implementation examples
-│   └── xgboost_for_proj2/         # XGBoost blight classification
-└── README.md                       # This file
+├── data/                          # Datasets (not committed to git)
+│   ├── blight_survey_data/        # DLBA property condition surveys
+│   ├── cod_layers_csv/            # City of Detroit address/parcel data
+│   └── cod_layers_gdb/            # Spatial geodatabase
+├── learning/                      # Learning resources and experiments
+│   ├── rag_for_proj1/            # RAG implementation examples
+│   └── xgboost_for_proj2/        # XGBoost blight classification
+├── environment.yml               # Conda environment specification
+├── requirements.txt              # Pip requirements (alternative)
+├── SETUP.md                      # Detailed setup instructions
+└── README.md                     # This file
 ```
 
 ## 🎯 Social Impact Goals

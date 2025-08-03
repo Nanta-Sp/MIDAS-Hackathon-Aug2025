@@ -1,137 +1,82 @@
 # MIDAS Hackathon - AI for Social Good Projects
 
-This repository contains two distinct AI projects developed for the MIDAS Hackathon, focused on applying machine learning and AI technologies to address real-world social challenges.
+This repository contains three AI projects developed for the MIDAS Hackathon, focused on applying machine learning and AI technologies to address real-world challenges in Detroit.
 
 ## 🎯 Project Overview
 
-### Project 1: RAG Systems for Enhanced Information Access
-**Directory**: `proj1_chatbots_for_mich/`
+### Project 1: Improving Search and Interaction in Detroit's Open Data Portal
+**Directory**: `1_detroit_open_data_portal/`
 
-Educational implementations of Retrieval-Augmented Generation (RAG) systems, demonstrating both manual and framework-based approaches for building intelligent question-answering systems.
+Natural language chatbot and search enhancement for Detroit's Open Data Portal, enabling intuitive exploration of 200+ city datasets for residents and researchers.
 
-### Project 2: Blight Detection for Urban Safety
-**Directory**: `proj2_blight_classification/` 
+### Project 2: Computer Vision for City Planning in Detroit
+**Directory**: `2_detroit_computer_vision/`
 
-Machine learning system for detecting and classifying property blight severity to support municipal intervention efforts and community safety initiatives.
+Computer vision tools using Detroit imagery (1999–2024) and GIS data to assess building habitability and enhance property-level data accuracy.
 
----
+### Project 3: Flood and Erosion Risk Policy Analysis Tool
+**Directory**: `3_detroit_flood_risk_analysis/`
 
-## 💬 Project 1: RAG Systems Comparison
-
-### Problem Statement
-Information access and knowledge management are critical challenges in many domains. RAG systems enhance AI responses by combining retrieval of relevant information with natural language generation.
-
-### Our Solution
-Two complete RAG implementations for educational and production use:
-
-1. **Manual RAG** (`medium_manual_rag/`): Built from scratch for learning
-   - Custom TF-IDF embeddings and retrieval
-   - Template-based generation
-   - Zero external dependencies
-   - ~800 lines of educational code
-
-2. **LangChain RAG** (`easy_langchain_rag/`): Modern framework implementation
-   - OpenAI embeddings and GPT integration
-   - FAISS vector database
-   - Production-ready architecture
-   - ~30 lines of framework code
-
-### Educational Value
-Provides clear learning progression from fundamental algorithms to modern AI frameworks, with comprehensive documentation and examples for computer science education.
+Interactive policy modeling tool for Detroit's resilience planning, supporting flood and erosion risk analysis under various policy scenarios.
 
 ---
 
-## 🏠 Project 2: Blight Detection System
+## 📊 Project Details
 
-### Problem Statement
-Property blight poses serious threats to public health, safety, and neighborhood stability. In Detroit alone, blighted properties contribute to:
-- Reduced neighborhood quality of life and community pride
-- Public safety hazards and health risks
-- Economic decline and reduced property values
-- Community disinvestment and population loss
+### 💬 Project 1: Detroit Open Data Portal Enhancement
+**Challenge**: Navigate 200+ datasets across multiple city departments
+**Solution**: Natural language chatbot with synonym recognition and improved metadata mapping
+**Impact**: Serves residents seeking localized data and researchers requiring cross-departmental insights
 
-### Our Solution
-A comprehensive XGBoost-based classification system that predicts property blight severity on a 4-level scale:
+### 🏙️ Project 2: Computer Vision for City Planning  
+**Challenge**: Assess building habitability and improve property data accuracy using imagery
+**Solution**: Computer vision models to identify uninhabitable structures and assist census audits
+**Impact**: Streamlines manual verification and enhances base unit data for multi-family buildings
 
-- **Level 1**: No blight (well-maintained property)
-- **Level 2**: Minor blight (cosmetic issues, minor repairs needed)
-- **Level 3**: Moderate blight (structural issues, significant deterioration)  
-- **Level 4**: Severe blight (unsafe/uninhabitable, potential demolition)
-
-### Impact & Applications
-This system helps municipalities:
-- **Prioritize inspections** based on blight risk scores
-- **Allocate resources** efficiently to highest-risk properties
-- **Support community planning** with data-driven insights
-- **Track progress** of neighborhood improvement initiatives
-
-The model achieves 59.5% accuracy with excellent screening capabilities (97.5% recall for identifying non-blighted properties), making it valuable for municipal resource allocation.
-
-### Technical Approach
-- **Data Sources**: 22 features from property records, tax data, code enforcement, USPS vacancy indicators, and neighborhood demographics
-- **Model**: XGBoost multi-class classifier with comprehensive evaluation metrics  
-- **Scale**: Trained on datasets up to 100,000 properties
-- **Deployment**: Production-ready prediction pipeline with batch processing capabilities
+### 🌊 Project 3: Flood Risk Policy Analysis
+**Challenge**: Model flood and erosion risks under various policy scenarios
+**Solution**: Interactive policy tool with LLM-based scenario analysis and hydrological modeling
+**Impact**: Supports Detroit's resilience planning with Great Lakes-specific data insights
 
 ---
 
 ## 🚀 Quick Start
 
-### Project 1: RAG Systems
+Each project directory contains detailed setup and usage instructions. See individual README files for specific implementation details.
+
 ```bash
-cd proj1_chatbots_for_mich
-
-# Educational path - start with manual implementation
-cd medium_manual_rag
-python simple_rag.py
-
-# Production path - modern framework
-cd ../easy_langchain_rag
-pip install -r requirements.txt
-python langchain_rag.py
-```
-
-### Project 2: Blight Detection
-```bash
-cd proj2_blight_classification
-pip install -r requirements.txt
-
-# Generate synthetic data
-python generate_synthetic_data.py
-
-# Train models
-python train_blight_model.py
-
-# Make predictions
-python predict_blight.py --model models/blight_model_large_dataset.joblib --demo
+# Explore any project
+cd 1_detroit_open_data_portal/     # Open Data Portal project
+cd 2_detroit_computer_vision/      # Computer Vision project  
+cd 3_detroit_flood_risk_analysis/  # Flood Risk Analysis project
+cat README.md
 ```
 
 ## 📁 Repository Structure
 
 ```
 MIDAS-Hackathon-Aug2025/
-├── proj1_chatbots_for_mich/       # RAG Systems Project
-│   ├── medium_manual_rag/         # Educational RAG implementation
-│   ├── easy_langchain_rag/        # Production RAG with LangChain
+├── 1_detroit_open_data_portal/     # Detroit Open Data Portal Enhancement
 │   └── README.md
-├── proj2_blight_classification/   # Blight Detection Project  
-│   ├── data/                      # Generated datasets
-│   ├── models/                    # Trained XGBoost models
-│   ├── generate_synthetic_data.py # Dataset creation
-│   ├── train_blight_model.py     # Model training pipeline
-│   ├── predict_blight.py         # Prediction interface
+├── 2_detroit_computer_vision/      # Computer Vision for City Planning
 │   └── README.md
-└── README.md                      # This file
+├── 3_detroit_flood_risk_analysis/  # Flood Risk Policy Analysis Tool
+│   └── README.md
+├── learning/                       # Learning resources and experiments
+│   ├── rag_for_proj1/             # RAG implementation examples
+│   └── xgboost_for_proj2/         # XGBoost blight classification
+└── README.md                       # This file
 ```
 
 ## 🎯 Social Impact Goals
 
-Both projects demonstrate AI's potential for positive social impact:
+All three projects demonstrate AI's potential for positive social impact in Detroit:
 
-- **Project 1** enhances information accessibility and AI education
-- **Project 2** directly supports urban safety and community improvement efforts
+- **Project 1** enhances civic engagement through improved data accessibility
+- **Project 2** supports urban planning and housing safety initiatives  
+- **Project 3** advances climate resilience and flood preparedness
 
-These implementations provide practical tools while advancing understanding of applied machine learning for social good.
+These implementations provide practical tools for city officials, residents, and researchers while advancing understanding of applied AI for urban challenges.
 
 ## 🤝 Contributing
 

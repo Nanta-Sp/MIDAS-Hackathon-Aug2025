@@ -2,6 +2,10 @@
 data/*
 !data/.gitkeep
 
+# Training data - CSV and TSV files
+*.csv
+*.tsv
+
 # Python
 __pycache__/
 *.pyc

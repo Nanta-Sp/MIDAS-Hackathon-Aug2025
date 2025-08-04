@@ -162,6 +162,10 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 Feel free to use, modify, and distribute this code for any purpose!
 
+## ⚠️ Disclaimer
+
+This project was developed independently as part of the MIDAS Hackathon. The code, documentation, and all content in this repository represent personal work and opinions, and are not affiliated with, endorsed by, or related to any employer or organization. All views expressed are my own.
+
 ---
 
 **🔧 Built with Python, scikit-learn, XGBoost, LangChain, and other modern ML tools**

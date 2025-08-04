@@ -1,151 +1,157 @@
 # MIDAS Hackathon - AI for Social Good Projects
 
-This repository contains three AI projects developed for the MIDAS Hackathon, focused on applying machine learning and AI technologies to address real-world challenges in Detroit.
-
-## 🎯 Project Overview
-
-### Project 1: Improving Search and Interaction in Detroit's Open Data Portal
-**Directory**: `1_detroit_open_data_portal/`
-
-Natural language chatbot and search enhancement for Detroit's Open Data Portal, enabling intuitive exploration of 200+ city datasets for residents and researchers.
-
-### Project 2: Computer Vision for City Planning in Detroit
-**Directory**: `2_detroit_computer_vision/`
-
-Computer vision tools using Detroit imagery (1999–2024) and GIS data to assess building habitability and enhance property-level data accuracy.
-
-### Project 3: Flood and Erosion Risk Policy Analysis Tool
-**Directory**: `3_detroit_flood_risk_analysis/`
-
-Interactive policy modeling tool for Detroit's resilience planning, supporting flood and erosion risk analysis under various policy scenarios.
-
----
-
-## 📊 Project Details
-
-### 💬 Project 1: Detroit Open Data Portal Enhancement
-**Challenge**: Navigate 200+ datasets across multiple city departments
-**Solution**: Natural language chatbot with synonym recognition and improved metadata mapping
-**Impact**: Serves residents seeking localized data and researchers requiring cross-departmental insights
-
-### 🏙️ Project 2: Computer Vision for City Planning  
-**Challenge**: Assess building habitability and improve property data accuracy using imagery
-**Solution**: Computer vision models to identify uninhabitable structures and assist census audits
-**Impact**: Streamlines manual verification and enhances base unit data for multi-family buildings
-
-### 🌊 Project 3: Flood Risk Policy Analysis
-**Challenge**: Model flood and erosion risks under various policy scenarios
-**Solution**: Interactive policy tool with LLM-based scenario analysis and hydrological modeling
-**Impact**: Supports Detroit's resilience planning with Great Lakes-specific data insights
-
----
-
-## ⚙️ Environment Setup
-
-### Quick Start (Recommended)
-
-1. **Create the conda environment:**
-   ```bash
-   # Create environment from file
-   conda env create -f environment.yml
-   
-   # Activate environment
-   conda activate midas_aug25
-   ```
-
-2. **Verify installation:**
-   ```bash
-   python -c "import pandas, numpy, sklearn, xgboost, jupyter; print('✅ All core libraries installed!')"
-   ```
-
-3. **Launch Jupyter for data analysis:**
-   ```bash
-   jupyter lab
-   # Navigate to: 2_detroit_computer_vision/eda/project2_detroit_blight_eda.ipynb
-   ```
-
-### Alternative Setup Options
-
-**Using pip only:**
-```bash
-# Create virtual environment
-python -m venv midas_aug25
-source midas_aug25/bin/activate  # Windows: midas_aug25\Scripts\activate
-
-# Install requirements
-pip install -r requirements.txt
-```
-
-**What's included in the environment:**
-- 🔬 **Data Science**: pandas, numpy, matplotlib, seaborn, jupyter
-- 🤖 **Machine Learning**: scikit-learn, xgboost, joblib  
-- 🗂️ **Data Handling**: openpyxl (Excel), geopandas (GIS)
-- 🤖 **AI/RAG**: langchain, faiss-cpu, openai integrations
-- 🗺️ **Geospatial**: folium, contextily (Detroit spatial data)
-
-For detailed setup instructions and troubleshooting, see **[SETUP.md](SETUP.md)**.
+This repository contains machine learning and AI implementations developed for the MIDAS Hackathon, focusing on technical applications for Detroit urban challenges.
 
 ## 🚀 Quick Start
 
-Each project directory contains detailed setup and usage instructions. See individual README files for specific implementation details.
-
+### Environment Setup
 ```bash
-# Explore any project
-cd 1_detroit_open_data_portal/     # Open Data Portal project
-cd 2_detroit_computer_vision/      # Computer Vision project  
-cd 3_detroit_flood_risk_analysis/  # Flood Risk Analysis project
-cat README.md
+# Option 1: Conda (Recommended)
+conda env create -f environment.yml
+conda activate midas_aug25
+
+# Option 2: Pip
+pip install -r requirements.txt
 ```
+
+NOTE: You may have to install another layer of requirements.txt files within the projects.
+
+### Learning Resources
+🎓 **New to ML/RAG?** Start here: [`learning/`](learning/)
+- **RAG Tutorial**: `learning/rag_for_proj1/` - Learn LangChain and vector databases
+- **Tabular ML Tutorial**: `learning/xgboost_for_proj2/` - Learn XGBoost for classification
+
+## 📊 Projects
+
+### Project 1: Detroit Open Data Portal Enhancement
+**Directory**: [`1_detroit_open_data_portal/`](1_detroit_open_data_portal/)
+
+Natural language chatbot for Detroit's Open Data Portal with 200+ city datasets.
+
+**Potential Tech Stack**: LangChain, FAISS, OpenAI API, vector embeddings, RAG (Retrieval-Augmented Generation)
+
+### Project 2: Detroit Computer Vision for Building Habitability
+**Directory**: [`2_detroit_computer_vision/`](2_detroit_computer_vision/)
+
+Computer vision tools for building habitability using Detroit imagery spanning 1999-2024.
+
+**Potential Future Components**: Computer vision models for aerial/street imagery analysis, temporal building deterioration analysis
+
+### Project 3: Detroit Flood Risk Policy Analysis
+**Directory**: [`3_detroit_flood_risk_analysis/`](3_detroit_flood_risk_analysis/)
+
+Interactive flood/erosion risk policy tool inspired by En-ROADS for stakeholder-driven scenario analysis.
+
+**Potential Tech Stack**: LLM integration for scenario generation, hydrological modeling, geospatial analysis, interactive web platform
+
+## 🛠️ Technical Details
+
+### Core Technologies
+- **Machine Learning**: XGBoost, scikit-learn, Optuna (hyperparameter optimization)
+- **RAG/LLM**: LangChain, FAISS, OpenAI API, vector embeddings
+- **Data Science**: pandas, numpy, matplotlib, seaborn, Jupyter
+- **Geospatial**: geopandas, folium, contextily
+
+### Key Features
+- **Reproducible environments** with conda/pip specifications
+- **Comprehensive evaluation** with balanced metrics for imbalanced data
+- **Production-ready code** with proper logging, model persistence
+- **Educational examples** in `learning/` directory
 
 ## 📁 Repository Structure
 
 ```
 MIDAS-Hackathon-Aug2025/
-├── 1_detroit_open_data_portal/     # Detroit Open Data Portal Enhancement
-│   └── README.md
-├── 2_detroit_computer_vision/      # Computer Vision for City Planning
-│   ├── eda/                       # Exploratory Data Analysis
-│   │   └── project2_detroit_blight_eda.ipynb
-│   └── README.md
-├── 3_detroit_flood_risk_analysis/  # Flood Risk Policy Analysis Tool
-│   └── README.md
-├── data/                          # Datasets (not committed to git)
-│   ├── blight_survey_data/        # DLBA property condition surveys
-│   ├── cod_layers_csv/            # City of Detroit address/parcel data
-│   └── cod_layers_gdb/            # Spatial geodatabase
-├── learning/                      # Learning resources and experiments
-│   ├── rag_for_proj1/            # RAG implementation examples
-│   └── xgboost_for_proj2/        # XGBoost blight classification
-├── environment.yml               # Conda environment specification
-├── requirements.txt              # Pip requirements (alternative)
-├── SETUP.md                      # Detailed setup instructions
-└── README.md                     # This file
+├── 1_detroit_open_data_portal/     # RAG for open data search
+├── 2_detroit_computer_vision/      # ML for blight classification
+│   ├── models/                    # XGBoost implementations
+│   ├── training_data/             # Processed datasets
+│   ├── deliverables/              # Model outputs & visualizations
+│   └── eda/                       # Exploratory data analysis
+├── 3_detroit_flood_risk_analysis/  # Policy modeling tool
+├── learning/                       # 🎓 Start here for tutorials
+│   ├── rag_for_proj1/             # Learn RAG implementation
+│   └── xgboost_for_proj2/         # Learn tabular ML
+├── data/                          # Raw datasets (not in git)
+├── environment.yml                # Conda environment
+├── requirements.txt               # Pip requirements
+└── SETUP.md                       # Detailed setup guide
 ```
 
-## 🎯 Social Impact Goals
+## 🔬 Data & Performance
 
-All three projects demonstrate AI's potential for positive social impact in Detroit:
+### Project 2 - Blight Classification (Baseline Model)
+**Current Implementation**: Multi-class blight classification using Detroit Land Bank Authority survey data as foundation for future computer vision work.
 
-- **Project 1** enhances civic engagement through improved data accessibility
-- **Project 2** supports urban planning and housing safety initiatives  
-- **Project 3** advances climate resilience and flood preparedness
+**Problem**: Multi-class classification (0=No Blight → 3=Extreme Blight)
+**Data**: Detroit Land Bank Authority survey data (~98k property records)
+**Features**: Property condition indicators (roof, openings, occupancy, fire damage)
+**Class Distribution**: Highly imbalanced (49% class 1, 4% class 3)
 
-These implementations provide practical tools for city officials, residents, and researchers while advancing understanding of applied AI for urban challenges.
+**Tech Stack**: XGBoost, scikit-learn, Optuna, pandas, matplotlib
+
+**Baseline Model Results**:
+- **XGBoost Baseline**: 62.6% accuracy, 51.4% macro F1
+- **XGBoost Optimized**: Bayesian hyperparameter tuning with Optuna
+- **Key Finding**: OPENINGS_CONDITION most predictive feature (60% importance)
+- **Challenge**: Poor performance on minority classes (severe blight cases)
+
+## 🧪 Running the Code
+
+### Project 2 Models
+```bash
+cd 2_detroit_computer_vision/models/
+python xgboost_baseline.py      # Baseline model
+python xgboost_optimized1.py    # Bayesian optimization + advanced features
+```
+
+### Learning Tutorials
+```bash
+# XGBoost Tutorial (Project 2)
+cd learning/xgboost_for_proj2/
+python generate_synthetic_data.py  # Generate demo data first
+python train_blight_model.py       # Learn XGBoost with synthetic data
+python predict_blight.py --model models/blight_model_large_dataset.joblib --demo
+
+# RAG Tutorial (Project 1)
+cd learning/rag_for_proj1/easy_langchain_rag/
+python synthetic_knowledge_base.py  # Generate knowledge base first
+python run_rag_demo.py              # Learn RAG implementation
+```
+
+## 📈 Technical Contributions
+
+### Machine Learning
+- **Bayesian hyperparameter optimization** using Optuna TPE sampler
+- **Advanced feature engineering** with interaction terms
+- **Proper evaluation** for imbalanced multi-class problems
+- **Production pipeline** with model persistence and logging
+
+### RAG Implementation
+- **Vector database** setup with FAISS
+- **Document chunking** and embedding strategies
+- **Graceful degradation** when API keys unavailable
+
+## 🎯 Impact & Applications
+
+**Technical Applications**:
+- **Automated property assessment** using tabular data
+- **Semantic search** over large document collections
+- **Policy scenario modeling** with LLM integration
+
+**Educational Value**:
+- **Complete ML pipelines** from data preprocessing to evaluation
+- **Best practices** for imbalanced classification
+- **RAG implementation** with practical examples
 
 ## 🤝 Contributing
 
-This hackathon project welcomes contributions to:
-- Improve model performance and fairness
-- Add real-world data integration
-- Enhance educational documentation
-- Expand to additional social good applications
-
-## 📜 About
-
-Developed for the MIDAS Hackathon with focus on applying AI and machine learning technologies to address real-world challenges affecting communities and urban environments.
-
-Here's a [link](https://midas.umich.edu/) for general MIDAS resources.
+Focus areas for technical contributions:
+- **Model improvements**: Better handling of class imbalance, ensemble methods
+- **Feature engineering**: Time-series features, spatial features from coordinates
+- **Evaluation**: Additional metrics, fairness analysis
+- **Documentation**: More tutorial examples, advanced techniques
 
 ---
 
-*🌟 AI for Social Good - Building technology that serves communities*
+**🔧 Built with Python, scikit-learn, XGBoost, LangChain, and other modern ML tools**

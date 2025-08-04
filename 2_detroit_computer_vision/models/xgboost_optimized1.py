@@ -620,7 +620,7 @@ def main():
     model, metrics, predictions, analytics = optimizer.run_full_pipeline(
         features_path=features_path,
         labels_path=labels_path,
-        n_trials=2,  # Quick test - increase for production
+        n_trials=5,  # Quick test - increase for production
         cv_folds=5
     )
     

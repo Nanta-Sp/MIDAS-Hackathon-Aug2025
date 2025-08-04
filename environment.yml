@@ -14,7 +14,7 @@ dependencies:
   
   # Machine Learning
   - scikit-learn>=1.2.0
-  - xgboost>=1.7.0
+  - xgboost>=2.0.0
   - joblib>=1.2.0
   
   # Jupyter and Analysis
@@ -43,6 +43,9 @@ dependencies:
     - langchain-openai
     - langchain-community
     - faiss-cpu
+    
+    # Machine Learning - Hyperparameter optimization
+    - optuna>=3.4.0
     
     # Additional utilities
     - python-dotenv  # For environment variables

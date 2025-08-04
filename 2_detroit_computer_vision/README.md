@@ -1,10 +1,10 @@
-# Detroit Computer Vision - Blight Classification Models
+# Project 2: Detroit Computer Vision for Building Habitability
 
-This directory contains machine learning models for predicting blight severity levels using Detroit property survey data from the Detroit Land Bank Authority (DLBA).
+## Project Description
 
-## Project Context
+Computer vision tools for building habitability using Detroit imagery spanning 1999-2024. This project aims to develop tools to assess building conditions and habitability using visual analysis of Detroit's built environment over time.
 
-The models work with blight survey data containing property condition assessments across Detroit. The task is multi-class classification to predict blight severity levels (0-3) based on property condition indicators.
+**Current Implementation**: Multi-class blight classification using Detroit Land Bank Authority survey data as a foundation for future computer vision work.
 
 **Data Source:** DLBA survey data (20250527_DLBA_survey_data_UM_Detroit.xlsx)
 **Problem Type:** Multi-class classification (4 classes)
@@ -14,37 +14,33 @@ The models work with blight survey data containing property condition assessment
 ## Models
 
 ### `xgboost_baseline.py`
-A baseline XGBoost classifier for 4-class blight prediction.
-
-**Features:**
-- Multi-class classification (0=No Blight, 1=Noticeable, 2=Significant, 3=Extreme)
-- Feature encoding and preprocessing
-- Comprehensive evaluation metrics
-- Feature importance analysis
-- Confusion matrix visualization
-- Predictions with PARCEL_ID tracking
-
-**Key Metrics:**
-- Uses accuracy, balanced accuracy, macro/weighted F1, Cohen's kappa, MCC
-- Train/validation/test split (70/10/20)
-- Per-class performance analysis
+Baseline XGBoost classifier for 4-class blight prediction with comprehensive evaluation metrics and feature importance analysis.
 
 ### `xgboost_optimized1.py`  
-An advanced XGBoost model with hyperparameter optimization and feature engineering.
+Advanced XGBoost model with Bayesian hyperparameter optimization (Optuna), feature engineering, and K-fold cross-validation.
 
-**Additional Features:**
-- Bayesian hyperparameter optimization (Optuna)
-- Advanced feature engineering (interaction terms)
-- Feature selection (mutual information)
-- Stratified K-fold cross-validation
-- Model persistence and comprehensive logging
-- Enhanced visualizations
+## Quick Start
 
-**Optimization:**
-- 10+ hyperparameters tuned automatically
-- Tree-structured Parzen Estimator (TPE) sampling
-- Early stopping and regularization
-- Class imbalance handling
+**Option 1: Use main environment (covers all projects)**
+```bash
+# From repository root
+pip install -r requirements.txt  # or: conda env create -f environment.yml
+cd 2_detroit_computer_vision/models/
+python xgboost_baseline.py
+```
+
+**Option 2: Use model-specific requirements (minimal install)**
+```bash
+cd 2_detroit_computer_vision/models/
+pip install -r requirements-xgboost_baseline.txt
+python xgboost_baseline.py
+
+# For optimized model
+pip install -r requirements-xgboost_optimized1.txt  
+python xgboost_optimized1.py
+```
+
+**Outputs**: All results saved to `deliverables/[model_name]/` with visualizations and metrics.
 
 ## Directory Structure
 
@@ -153,3 +149,13 @@ Each model generates comprehensive artifacts in `deliverables/[model_name]/`:
 - ROOF_CONDITION and IS_OCCUPIED are secondary features
 
 The models handle class imbalance through balanced evaluation metrics, stratified sampling, and proper train/validation/test splits.
+
+## Potential Future Computer Vision Components
+
+**Planned Features**:
+- Aerial imagery analysis for building condition assessment
+- Street-level imagery processing for habitability metrics
+- Temporal analysis of building deterioration (1999-2024)
+- Integration of survey data with visual analysis
+
+**Potential Tech Stack**: OpenCV, PyTorch/TensorFlow, satellite/aerial imagery APIs, computer vision models

@@ -54,7 +54,7 @@ class XGBoostOptimizer:
         return data
     
     def engineer_features(self, df, fit_transform=True):
-        """Advanced feature engineering with interaction terms and transformations."""
+        """Enhanced feature engineering with more interaction terms and transformations."""
         print("Engineering features...")
         df_engineered = df.copy()
         
@@ -85,9 +85,9 @@ class XGBoostOptimizer:
                             df_engineered[col] = df_engineered[col].replace(category, 'Unknown')
                     df_engineered[col] = self.label_encoders[col].transform(df_engineered[col])
         
-        # Create interaction features
+        # Create enhanced interaction features
         if len(df_engineered.columns) >= 2:
-            # Most important interactions based on baseline model
+            # Primary interactions (most important)
             if 'OPENINGS_CONDITION' in df_engineered.columns and 'ROOF_CONDITION' in df_engineered.columns:
                 df_engineered['openings_roof_interaction'] = (
                     df_engineered['OPENINGS_CONDITION'] * df_engineered['ROOF_CONDITION']
@@ -97,36 +97,70 @@ class XGBoostOptimizer:
                 df_engineered['occupied_openings_interaction'] = (
                     df_engineered['IS_OCCUPIED'] * df_engineered['OPENINGS_CONDITION']
                 )
+            
+            # Additional interactions for better minority class detection
+            if 'FIRE_DAMAGE_CONDITION' in df_engineered.columns and 'ROOF_CONDITION' in df_engineered.columns:
+                df_engineered['fire_roof_interaction'] = (
+                    df_engineered['FIRE_DAMAGE_CONDITION'] * df_engineered['ROOF_CONDITION']
+                )
+            
+            if 'IS_OPEN_TO_TRESPASS' in df_engineered.columns and 'IS_OCCUPIED' in df_engineered.columns:
+                df_engineered['trespass_occupied_interaction'] = (
+                    df_engineered['IS_OPEN_TO_TRESPASS'] * df_engineered['IS_OCCUPIED']
+                )
+            
+            # Triple interaction for extreme cases
+            if all(col in df_engineered.columns for col in ['OPENINGS_CONDITION', 'ROOF_CONDITION', 'FIRE_DAMAGE_CONDITION']):
+                df_engineered['condition_severity_score'] = (
+                    df_engineered['OPENINGS_CONDITION'] + 
+                    df_engineered['ROOF_CONDITION'] + 
+                    df_engineered['FIRE_DAMAGE_CONDITION']
+                )
         
-        # Feature scaling for interaction terms
+        # Feature scaling for interaction terms and condition scores
         if fit_transform:
             self.scaler = StandardScaler()
-            interaction_cols = [col for col in df_engineered.columns if 'interaction' in col]
-            if interaction_cols:
-                df_engineered[interaction_cols] = self.scaler.fit_transform(df_engineered[interaction_cols])
+            scale_cols = [col for col in df_engineered.columns if 'interaction' in col or 'score' in col]
+            if scale_cols:
+                df_engineered[scale_cols] = self.scaler.fit_transform(df_engineered[scale_cols])
         else:
-            interaction_cols = [col for col in df_engineered.columns if 'interaction' in col]
-            if interaction_cols and hasattr(self, 'scaler'):
-                df_engineered[interaction_cols] = self.scaler.transform(df_engineered[interaction_cols])
+            scale_cols = [col for col in df_engineered.columns if 'interaction' in col or 'score' in col]
+            if scale_cols and hasattr(self, 'scaler'):
+                df_engineered[scale_cols] = self.scaler.transform(df_engineered[scale_cols])
         
         if fit_transform:
             self.feature_names = df_engineered.columns.tolist()
         
         return df_engineered
     
-    def select_features(self, X, y, k=15):
-        """Feature selection using mutual information."""
-        print(f"Selecting top {k} features...")
+    def select_features(self, X, y, k=20):
+        """Enhanced feature selection using multiple methods."""
+        print(f"Selecting top {k} features using multiple selection methods...")
         
-        selector = SelectKBest(score_func=mutual_info_classif, k=k)
-        X_selected = selector.fit_transform(X, y)
+        # Method 1: Mutual information
+        mi_selector = SelectKBest(score_func=mutual_info_classif, k=min(k, len(X.columns)))
+        mi_scores = mutual_info_classif(X, y)
+        mi_features = X.columns[np.argsort(mi_scores)[-k:]].tolist()
         
-        selected_features = X.columns[selector.get_support()].tolist()
-        self.feature_selector = selector
-        self.selected_features = selected_features
+        # Method 2: F-statistic
+        f_selector = SelectKBest(score_func=f_classif, k=min(k, len(X.columns)))
+        f_scores = f_classif(X, y)[0]
+        f_features = X.columns[np.argsort(f_scores)[-k:]].tolist()
         
-        print(f"Selected features: {selected_features}")
-        return pd.DataFrame(X_selected, columns=selected_features, index=X.index)
+        # Combine features from both methods (union)
+        combined_features = list(set(mi_features + f_features))
+        
+        # If we have more than k features, prioritize by mutual information
+        if len(combined_features) > k:
+            mi_ranking = {feat: score for feat, score in zip(X.columns, mi_scores)}
+            combined_features = sorted(combined_features, key=lambda x: mi_ranking[x], reverse=True)[:k]
+        
+        # Select the features
+        X_selected = X[combined_features]
+        self.selected_features = combined_features
+        
+        print(f"Selected {len(combined_features)} features: {combined_features}")
+        return X_selected
     
     def get_class_weights(self, y):
         """Calculate class weights for imbalanced data."""
@@ -137,26 +171,38 @@ class XGBoostOptimizer:
     def objective(self, trial, X, y, cv_folds=5):
         """Optuna objective function for hyperparameter optimization."""
         
-        # Hyperparameter search space
+        # Calculate class weights for imbalanced data
+        class_weights = self.get_class_weights(y)
+        
+        # Hyperparameter search space - optimized for imbalanced multi-class
         params = {
             'objective': 'multi:softprob',
             'num_class': 4,
             'eval_metric': 'mlogloss',
             'random_state': self.random_state,
             'verbosity': 0,
+            'tree_method': 'hist',  # Faster training
             
-            # Tunable parameters
-            'max_depth': trial.suggest_int('max_depth', 3, 10),
-            'learning_rate': trial.suggest_float('learning_rate', 0.01, 0.3, log=True),
-            'n_estimators': trial.suggest_int('n_estimators', 100, 1000),
-            'subsample': trial.suggest_float('subsample', 0.6, 1.0),
-            'colsample_bytree': trial.suggest_float('colsample_bytree', 0.6, 1.0),
-            'reg_alpha': trial.suggest_float('reg_alpha', 0.0, 10.0),
-            'reg_lambda': trial.suggest_float('reg_lambda', 0.0, 10.0),
-            'min_child_weight': trial.suggest_int('min_child_weight', 1, 10),
-            'gamma': trial.suggest_float('gamma', 0.0, 5.0),
-            'scale_pos_weight': trial.suggest_float('scale_pos_weight', 1.0, 5.0)
+            # Tunable parameters - expanded ranges for better performance
+            'max_depth': trial.suggest_int('max_depth', 4, 12),
+            'learning_rate': trial.suggest_float('learning_rate', 0.005, 0.4, log=True),
+            'n_estimators': trial.suggest_int('n_estimators', 200, 2000, step=100),
+            'subsample': trial.suggest_float('subsample', 0.5, 1.0),
+            'colsample_bytree': trial.suggest_float('colsample_bytree', 0.5, 1.0),
+            'colsample_bylevel': trial.suggest_float('colsample_bylevel', 0.5, 1.0),
+            'colsample_bynode': trial.suggest_float('colsample_bynode', 0.5, 1.0),
+            'reg_alpha': trial.suggest_float('reg_alpha', 1e-8, 50.0, log=True),
+            'reg_lambda': trial.suggest_float('reg_lambda', 1e-8, 50.0, log=True),
+            'min_child_weight': trial.suggest_int('min_child_weight', 1, 20),
+            'gamma': trial.suggest_float('gamma', 0.0, 20.0),
+            'max_delta_step': trial.suggest_float('max_delta_step', 0.0, 10.0),
+            # Better handling of class imbalance
+            'grow_policy': trial.suggest_categorical('grow_policy', ['depthwise', 'lossguide'])
         }
+        
+        # Conditionally add max_leaves only for lossguide policy
+        if params['grow_policy'] == 'lossguide':
+            params['max_leaves'] = trial.suggest_int('max_leaves', 32, 256)
         
         # Stratified K-fold cross-validation
         skf = StratifiedKFold(n_splits=cv_folds, shuffle=True, random_state=self.random_state)
@@ -166,16 +212,27 @@ class XGBoostOptimizer:
             X_train_fold, X_val_fold = X.iloc[train_idx], X.iloc[val_idx]
             y_train_fold, y_val_fold = y.iloc[train_idx], y.iloc[val_idx]
             
-            model = xgb.XGBClassifier(**params)
+            # Calculate sample weights for this fold
+            sample_weights = np.array([class_weights[label] for label in y_train_fold])
+            
+            model = xgb.XGBClassifier(**params, early_stopping_rounds=50)
             model.fit(
                 X_train_fold, y_train_fold,
+                sample_weight=sample_weights,
                 eval_set=[(X_val_fold, y_val_fold)],
                 verbose=False
             )
             
             y_pred = model.predict(X_val_fold)
+            
+            # Use weighted F1 score that emphasizes minority classes
             f1_macro = f1_score(y_val_fold, y_pred, average='macro')
-            cv_scores.append(f1_macro)
+            f1_weighted = f1_score(y_val_fold, y_pred, average='weighted')
+            balanced_acc = balanced_accuracy_score(y_val_fold, y_pred)
+            
+            # Combined score that emphasizes both macro F1 and balanced accuracy
+            combined_score = 0.5 * f1_macro + 0.3 * f1_weighted + 0.2 * balanced_acc
+            cv_scores.append(combined_score)
         
         return np.mean(cv_scores)
     
@@ -200,7 +257,8 @@ class XGBoostOptimizer:
             'num_class': 4,
             'eval_metric': 'mlogloss',
             'random_state': self.random_state,
-            'verbosity': 0
+            'verbosity': 0,
+            'tree_method': 'hist'
         })
         
         print(f"Best macro F1-score: {study.best_value:.4f}")
@@ -296,10 +354,14 @@ class XGBoostOptimizer:
         return cv_summary
     
     def train_final_model(self, X_train, y_train, X_val=None, y_val=None):
-        """Train the final model with optimized parameters."""
+        """Train the final model with optimized parameters and class weights."""
         print("Training final model...")
         
-        self.best_model = xgb.XGBClassifier(**self.best_params)
+        # Calculate class weights for training
+        class_weights = self.get_class_weights(y_train)
+        sample_weights = np.array([class_weights[label] for label in y_train])
+        
+        self.best_model = xgb.XGBClassifier(**self.best_params, early_stopping_rounds=100)
         
         eval_set = [(X_train, y_train)]
         if X_val is not None and y_val is not None:
@@ -307,6 +369,7 @@ class XGBoostOptimizer:
         
         self.best_model.fit(
             X_train, y_train,
+            sample_weight=sample_weights,
             eval_set=eval_set,
             verbose=True
         )
@@ -570,8 +633,8 @@ class XGBoostOptimizer:
         X = self.engineer_features(data.drop(['PARCEL_ID', 'BLIGHT_LABEL'], axis=1))
         y = data['BLIGHT_LABEL']
         
-        # Feature selection
-        X_selected = self.select_features(X, y, k=min(15, len(X.columns)))
+        # Feature selection - increased from 15 to 20 for better feature coverage
+        X_selected = self.select_features(X, y, k=min(20, len(X.columns)))
         
         # Split data
         X_temp, X_test, y_temp, y_test, idx_temp, idx_test = train_test_split(
@@ -620,7 +683,7 @@ def main():
     model, metrics, predictions, analytics = optimizer.run_full_pipeline(
         features_path=features_path,
         labels_path=labels_path,
-        n_trials=5,  # Quick test - increase for production
+        n_trials=50,  # Increased for better optimization
         cv_folds=5
     )
     

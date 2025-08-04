@@ -156,6 +156,12 @@ Focus areas for technical contributions:
 - **Evaluation**: Additional metrics, fairness analysis
 - **Documentation**: More tutorial examples, advanced techniques
 
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+Feel free to use, modify, and distribute this code for any purpose!
+
 ---
 
 **🔧 Built with Python, scikit-learn, XGBoost, LangChain, and other modern ML tools**

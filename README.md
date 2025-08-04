@@ -21,6 +21,10 @@ NOTE: You may have to install another layer of requirements.txt files within the
 - **RAG Tutorial**: `learning/rag_for_proj1/` - Learn LangChain and vector databases
 - **Tabular ML Tutorial**: `learning/xgboost_for_proj2/` - Learn XGBoost for classification
 
+**External Resources:**
+- **RAG-time**: [Microsoft's RAG cookbook](https://github.com/microsoft/rag-time) - Production RAG patterns
+- **XGBoost Guide**: [Complete Guide to Parameter Tuning](https://xgboost.readthedocs.io/en/stable/tutorials/param_tuning.html) - Official XGBoost tuning
+
 ## 📊 Projects
 
 ### Project 1: Detroit Open Data Portal Enhancement

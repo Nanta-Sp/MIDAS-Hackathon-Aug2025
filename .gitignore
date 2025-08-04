@@ -6,6 +6,11 @@ data/*
 *.csv
 *.tsv
 
+# Model files - don't commit trained models
+*.joblib
+*.pkl
+*.model
+
 # Python
 __pycache__/
 *.pyc
